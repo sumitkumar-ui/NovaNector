@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 
-
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,6 +10,7 @@ const ContactUs = () => {
   });
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -20,7 +20,7 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://novanector.onrender.com', {
+      const response = await fetch('https://novanector.onrender.com/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -30,20 +30,23 @@ const ContactUs = () => {
 
       if (response.ok) {
         setSuccessMessage('Data submitted successfully');
+        setErrorMessage('');
         setFormData({ name: '', contact: '', email: '', message: '' });
       } else {
-        setSuccessMessage('Error submitting data');
+        setErrorMessage('Error submitting data');
+        setSuccessMessage('');
       }
     } catch (error) {
-      setSuccessMessage('Error submitting data');
+      setErrorMessage('Error submitting data');
+      setSuccessMessage('');
     }
   };
 
   return (
     <>
-     
+      
       <div className="w-full text-center mt-0 py-3 bg-Blue-3000">
-        <h2 className="text-3xl md:text-4xl font-bold mb-10 mt-8">Contact Us</h2>
+        <h2 className="text-3xl md:text-3xl font-bold mb-10 mt-8">Contact Us</h2>
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/2 p-4">
             {/* Google Map location */}
@@ -118,6 +121,7 @@ const ContactUs = () => {
                 </button>
               </div>
               {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
+              {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
             </form>
           </div>
         </div>

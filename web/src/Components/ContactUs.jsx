@@ -11,6 +11,7 @@ const ContactUs = () => {
   });
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -20,7 +21,7 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://novanector.onrender.com', {
+      const response = await fetch('https://novanector.onrender.com/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -30,12 +31,15 @@ const ContactUs = () => {
 
       if (response.ok) {
         setSuccessMessage('Data submitted successfully');
+        setErrorMessage('');
         setFormData({ name: '', contact: '', email: '', message: '' });
       } else {
-        setSuccessMessage('Error submitting data');
+        setErrorMessage('Error submitting data');
+        setSuccessMessage('');
       }
     } catch (error) {
-      setSuccessMessage('Error submitting data');
+      setErrorMessage('Error submitting data');
+      setSuccessMessage('');
     }
   };
 
@@ -118,12 +122,12 @@ const ContactUs = () => {
                 </button>
               </div>
               {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
+              {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
             </form>
           </div>
         </div>
       </div>
       <Footer/>
-      
     </>
   );
 };
